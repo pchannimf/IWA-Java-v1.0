@@ -1,6 +1,6 @@
 # IWA (Insecure Web App) Java Edition
 
-## Overview by Vikas
+## Overview
 
 _IWA (Insecure Web App) Java Edition_ is an example Java/Spring Web Application for use in **DevSecOps** scenarios and demonstrations.
 It includes some examples of bad and insecure code - which can be found using static and dynamic application
