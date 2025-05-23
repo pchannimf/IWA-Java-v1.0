@@ -98,8 +98,14 @@ jobs:
           fod_password: ${{ secrets.FOD_PAT }}
           fod_release_id: ${{ secrets.FOD_RELEASE_ID }}
 
-      # Import Fortify on Demand results to GitHub Security Code Scanning
-      - name: Import Results
-        uses: github/codeql-action/upload-sarif@v2
+      # Test Upload Artifacts
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.6.2
         with:
-          sarif_file: ./gh-fortify-sast.sarif
+          # Artifact name
+          name: fortify logs
+          # A file, directory or wildcard pattern that describes what to upload
+          path: /home/runner/.fortify/scancentral-24.4.1/log/
+
+
+          
