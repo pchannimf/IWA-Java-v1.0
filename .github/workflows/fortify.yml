@@ -39,14 +39,14 @@ jobs:
     steps:
       # Check out source code
       - name: Check Out Source Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Java is required to run the various Fortify utilities.
       # When scanning a Java application, please use the appropriate Java version for building your application.
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
-          java-version: 11
+          java-version: 17
           distribution: 'zulu'
           cache: maven
 
@@ -63,7 +63,7 @@ jobs:
       - name: Download Fortify ScanCentral Client
         uses: fortify/gha-setup-scancentral-client@5b7382f8234fb9840958c49d5f32ae854115f9f3
         with:
-          version: 23.1.0
+          version: 24.4.1
       
       - name: Package Code + Dependencies
         run: scancentral package $PACKAGE_OPTS -o package.zip
