@@ -77,7 +77,8 @@ jobs:
       - name: Download Fortify on Demand Universal CI Tool
         uses: fortify/gha-setup-fod-uploader@6e6bb8a33cb476e240929fa8ebc739ff110e7433
       - name: Perform SAST Scan
-        run: java -jar $FOD_UPLOAD_JAR -z package.zip -aurl $FOD_API_URL -purl $FOD_URL -rid "$FOD_RELEASE_ID" -tc "$FOD_TENANT" -uc "$FOD_USER" "$FOD_PAT" $FOD_UPLOADER_OPTS -n "$FOD_UPLOADER_NOTES"
+        run: scancentral.bat start -upload package.zip -url $FOD_URL -tenant $FOD_TENANT -clientid $client_id -clientsecret $client_secret -project $project -version $version -no-update -verbose 
+        # java -jar $FOD_UPLOAD_JAR -z package.zip -aurl $FOD_API_URL -purl $FOD_URL -rid "$FOD_RELEASE_ID" -tc "$FOD_TENANT" -uc "$FOD_USER" "$FOD_PAT" $FOD_UPLOADER_OPTS -n "$FOD_UPLOADER_NOTES"
         env:
           FOD_URL: ${{ secrets.FOD_URL }}
           FOD_API_URL: ${{ secrets.FOD_API_URL }}
@@ -85,20 +86,14 @@ jobs:
           FOD_USER: ${{ secrets.FOD_USER }}
           FOD_PAT: ${{ secrets.FOD_PAT }}
           FOD_RELEASE_ID: ${{ secrets.FOD_RELEASE_ID }}
+          client_id: ${{ secrets.CLIENT_ID }}
+          client_secret: ${{ secrets.CLIENT_SECRET }}
+          project: ${{ secrets.PROJECT }}
+          version: ${{ secrets.VERSION }}
           FOD_UPLOADER_OPTS: "-ep 2 -pp 0 -I 1 -apf"
           FOD_UPLOADER_NOTES: 'Triggered by GitHub Actions (${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})'
 
-      # Once scan completes, pull SAST issues from Fortify on Demand and generate SARIF output.
-      - name: Export results to GitHub-optimized SARIF
-        uses: fortify/gha-export-vulnerabilities@fcb374411cff9809028c911dabb8b57dbdae623b
-        with:
-          fod_base_url: ${{ secrets.FOD_URL }}
-          fod_tenant: ${{ secrets.FOD_TENANT }}
-          fod_user: ${{ secrets.FOD_USER }}
-          fod_password: ${{ secrets.FOD_PAT }}
-          fod_release_id: ${{ secrets.FOD_RELEASE_ID }}
-
-      # Test Upload Artifacts
+     # Test Upload Artifacts
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
         with:
